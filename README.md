@@ -8,6 +8,7 @@ The goal of the series is to understand the basics of MLOps like model building,
 
 ![pl](images/summary.png)
 
+[**All Blog Post**](https://deep-learning-blogs.vercel.app/)
 ## Week 0: Project Setup
 
 <img src="https://img.shields.io/static/v1.svg?style=for-the-badge&label=difficulty&message=easy&color=green"/>
