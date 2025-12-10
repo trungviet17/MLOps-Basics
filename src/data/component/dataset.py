@@ -12,7 +12,6 @@ class DiabetesDataset(Dataset):
         self.data = self._preprocess()
 
 
-
     def __len__(self): 
 
         return len(self.data)
@@ -20,7 +19,7 @@ class DiabetesDataset(Dataset):
     def __getitem__(self, idx): 
         sample = self.data.iloc[idx]
         y = torch.tensor(sample['diagnosed_diabetes'], dtype=torch.float32)
-        x = sample.drop('diagnosed_diabetes').values
+        x = sample.drop('diagnosed_diabetes').values.astype(float)
         x = torch.tensor(x, dtype=torch.float32)
         return x, y
 
@@ -54,11 +53,7 @@ class DiabetesDataset(Dataset):
         df_encoded['smoking_status'] = self.data['smoking_status'].map(smoking_mapping)
 
         df_encoded = pd.get_dummies(df_encoded, columns=['gender'], prefix='gender', drop_first=False)
-
-        # employment_status - nominal, ít categories (4 values)
         df_encoded = pd.get_dummies(df_encoded, columns=['employment_status'], prefix='employment', drop_first=False)
-
-        # ethnicity - nominal, ít categories (5 values)
         df_encoded = pd.get_dummies(df_encoded, columns=['ethnicity'], prefix='ethnicity', drop_first=False)
 
         return df_encoded
@@ -68,11 +63,18 @@ class DiabetesDataset(Dataset):
 if __name__ == "__main__":
 
 
-    pyrootutils.set_root(__file__, indicator=".project-root", pythonpath=True)
-    path = pyrootutils.find_root(__file__, indicator=".project-root") / "data" / "raw" / "diabetes.csv"
+    pyrootutils.set_root(__file__, pythonpath=True)
+    path = pyrootutils.find_root(__file__, indicator=".project-root") / "data" / "train.csv"
 
     data = pd.read_csv(path)
 
     dataset = DiabetesDataset(data)
     first_sample =  dataset[0]
+
+
+    print("First sample (features, label):")
+    print(first_sample)
+    print("Feature shape:", first_sample[0].shape)
+    print("Label:", first_sample[1])
+    print("Dataset length:", len(dataset))
 
